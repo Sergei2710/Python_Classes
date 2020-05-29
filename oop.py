@@ -14,7 +14,7 @@ class Employee:
         Employee.num_of_emps += 1
 
     def fullname(self):
-        return '{}{}'.format(self.first, self.last)
+        return '{} {}'.format(self.first, self.last)
 
     def apply_raise(self):
         self.pay = int(self.pay * self.raise_amt)
@@ -34,11 +34,45 @@ class Employee:
             return False
         return True
 
+class Developer(Employee):
+    raise_amt = 1.10
 
-emp_1 = Employee('Corey', 'Schafer', 50000)
-emp_2 = Employee('Test', 'Employee', 60000)
+    def __init__(self, first, last, pay, prog_lang):
+        super().__init__(first, last, pay) #This method is good if we have only ONE Inheritance
+        #Employee.__init__(self, first, last, pay)  This method is specify to which parent to go, best way when we have several Inheritances
+        self.prog_lang = prog_lang
 
-import datetime
-my_date = datetime.date(2016, 7, 10)
+class Manager(Employee):
+        def __init__(self, first, last, pay, employees=None):  #employees=None Will initialize an empty list
+            super().__init__(first, last, pay)
+            if employees is None:
+                self.employees = []
+            else:
+                self.employees = employees
 
-print(Employee.is_workday(my_date))
+        def add_emp(self, emp):
+            if emp not in self.employees:
+                self.employees.append(emp)
+
+        def remove_emp(self, emp):
+            if emp in self.employees:
+                self.employees.remove(emp)
+
+        def print_emps(self):
+            for emp in self.employees:
+                print('-->', emp.fullname())
+
+
+dev_1 = Developer('Corey', 'Schafer', 50000, 'Python')
+dev_2 = Developer('Test', 'Employee', 60000, 'Java')
+
+mgr_1 = Manager('Sue', 'Smith', 90000, [dev_1])
+
+print(mgr_1.email)
+
+mgr_1.add_emp(dev_2)
+mgr_1.remove_emp(dev_1)
+
+mgr_1.print_emps()
+
+
